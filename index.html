@@ -140,6 +140,39 @@ let lastLockedCharacter = null;
 let spinSpeed = 100;
 let isSlowingDown = false;
 let spinTimeout = null;
+let deck = [];
+let deckIndex = 0;
+
+    function shuffleDeck() {
+
+    deck = [...characters];
+
+    for (
+        let i = deck.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() *
+                (i + 1)
+            );
+
+        [
+            deck[i],
+            deck[j]
+        ] =
+        [
+            deck[j],
+            deck[i]
+        ];
+
+    }
+
+    deckIndex = 0;
+
+}
 
 function getRandomCharacter() {
 
@@ -174,10 +207,44 @@ function displayCharacter(character) {
 
 }
 
+    function getDeckCharacter() {
+
+    if (
+        deck.length === 0 ||
+        deckIndex >= deck.length
+    ) {
+
+        shuffleDeck();
+
+    }
+
+    const chosen =
+        deck[deckIndex];
+
+    deckIndex++;
+
+    return chosen;
+
+}
+
 function spin() {
 
+    let chosen;
+
+    if (isSlowingDown) {
+
+        chosen =
+            getRandomCharacter();
+
+    } else {
+
+        chosen =
+            getDeckCharacter();
+
+    }
+
     displayCharacter(
-        getRandomCharacter()
+        chosen
     );
 
     if (isSlowingDown) {
@@ -355,9 +422,16 @@ function reroll() {
 
     spinSpeed = 100;
 
-    isSlowingDown = false;
+isSlowingDown = false;
 
-    spin();
+document.getElementById(
+    "rollButton"
+).style.display =
+    "inline-block";
+
+shuffleDeck();
+
+spin();
 
 }
 
@@ -365,6 +439,8 @@ document.getElementById(
     "namebox"
 ).innerText =
     "Digging through character pile...";
+
+shuffleDeck();
 
 spin();
 
