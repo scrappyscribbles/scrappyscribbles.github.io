@@ -249,10 +249,10 @@ function spin() {
 
     if (isSlowingDown) {
 
-        spinSpeed += 35;
+        spinSpeed += 25;
 
         if (
-            spinSpeed > 180 &&
+            spinSpeed > 250 &&
             document.getElementById(
                 "namebox"
             ).innerText !==
@@ -266,7 +266,7 @@ function spin() {
 
         }
 
-        if (spinSpeed >= 350) {
+        if (spinSpeed >= 450) {
 
             finishRoll();
             return;
@@ -314,7 +314,7 @@ function finishRoll() {
 
     setTimeout(
         revealWinner,
-        800
+        1500
     );
 
 }
