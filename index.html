@@ -3,7 +3,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>ʕノ•ᴥ•ʔノ Scrappy's Randomized Oc Decider</title>
+<title>Scrappy's Randomized Oc Decider</title>
 </head>
 
 <body style="
@@ -14,7 +14,7 @@ text-align:center;
 padding:30px;
 ">
 
-<h1> SCRAPPY'S RANDOMIZED OC DECIDER ⚔</h1>
+<h1>ʕノ•ᴥ•ʔノ SCRAPPY'S RANDOMIZED OC DECIDER ⚔</h1>
 
 <p>
 Can't decide who to attack?<br>
@@ -296,26 +296,37 @@ function lockTarget() {
     document.getElementById(
         "namebox"
     ).innerText =
-        "The fates are debating...";
+        "Looking for candidates...";
 
 }
 
 function finishRoll() {
 
-    clearTimeout(
-        spinTimeout
-    );
+    clearTimeout(spinTimeout);
 
-    document.getElementById(
-        "namebox"
-    ).innerText =
+    document.getElementById("namebox").innerText =
         "The fates have decided...";
 
-    setTimeout(
-        revealWinner,
-        1500
-    );
+    let extraShuffles = 3;
 
+    function finalShuffleStep() {
+
+        if (extraShuffles > 0) {
+
+            displayCharacter(getRandomCharacter());
+
+            extraShuffles--;
+
+            setTimeout(finalShuffleStep, 120);
+
+        } else {
+
+            revealWinner();
+
+        }
+    }
+
+    setTimeout(finalShuffleStep, 500);
 }
 
 function revealWinner() {
