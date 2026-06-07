@@ -1,73 +1,3 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-<meta charset="UTF-8">
-<title>Scrappy's Attack Target Generator</title>
-</head>
-
-<body style="
-background:#101820;
-color:white;
-font-family:Arial,sans-serif;
-text-align:center;
-padding:30px;
-">
-
-<h1>⚔ SCRAPPY'S ATTACK TARGET GENERATOR ⚔</h1>
-
-<p>
-Can't decide who to attack?<br>
-Lock in a target and let fate decide.
-</p>
-
-<img
-id="portrait"
-src="images/scrap.png"
-style="
-width:300px;
-height:300px;
-border-radius:15px;
-border:4px solid #2bb6a8;
-"
->
-
-<div
-id="namebox"
-style="
-margin-top:20px;
-font-size:24px;
-font-weight:bold;
-"
->
-SCANNING DATABASE...
-</div>
-
-<br>
-
-<button
-id="rollButton"
-onclick="lockTarget()"
-style="
-background:#2bb6a8;
-color:white;
-border:none;
-padding:15px 30px;
-font-size:20px;
-border-radius:10px;
-"
->
-🎲 LOCK TARGET
-</button>
-
-<div
-id="linkbox"
-style="
-margin-top:20px;
-"
->
-</div>
-
 <script>
 
 const characters = [
@@ -134,35 +64,10 @@ image:"images/bob.png"
 
 ];
 
-const spinMessages = [
-
-"Digging through character pile...",
-"Consulting the doodles...",
-"Looking for inspiration...",
-"Shaking the OC box...",
-"Throwing darts at character wall...",
-"Trying not to choose favorites...",
-"Summoning artistic chaos...",
-"Searching for today's victim..."
-
-];
-
-const slowdownMessages = [
-
-"The doodles are debating...",
-"The fates are thinking...",
-"Almost decided...",
-"Just a moment...",
-"One more shuffle...",
-"This is a tough one..."
-
-];
-
-let currentCharacter = null;
 let previousCharacter = null;
 let lastLockedCharacter = null;
 
-let spinSpeed = 80;
+let spinSpeed = 100;
 let isSlowingDown = false;
 let spinTimeout = null;
 
@@ -173,12 +78,12 @@ function getRandomCharacter() {
     do {
 
         chosen =
-        characters[
-            Math.floor(
-                Math.random() *
-                characters.length
-            )
-        ];
+            characters[
+                Math.floor(
+                    Math.random() *
+                    characters.length
+                )
+            ];
 
     } while (
         previousCharacter &&
@@ -188,42 +93,14 @@ function getRandomCharacter() {
     previousCharacter = chosen;
 
     return chosen;
-}
-
-function randomMessage() {
-
-    if (isSlowingDown) {
-
-        return slowdownMessages[
-            Math.floor(
-                Math.random() *
-                slowdownMessages.length
-            )
-        ];
-
-    }
-
-    return spinMessages[
-        Math.floor(
-            Math.random() *
-            spinMessages.length
-        )
-    ];
 
 }
 
 function displayCharacter(character) {
 
-    currentCharacter = character;
-
     document.getElementById(
         "portrait"
     ).src = character.image;
-
-    document.getElementById(
-        "namebox"
-    ).innerText =
-        randomMessage();
 
 }
 
@@ -236,6 +113,21 @@ function spin() {
     if (isSlowingDown) {
 
         spinSpeed += 35;
+
+        if (
+            spinSpeed > 180 &&
+            document.getElementById(
+                "namebox"
+            ).innerText !==
+            "The doodles are debating..."
+        ) {
+
+            document.getElementById(
+                "namebox"
+            ).innerText =
+                "The doodles are debating...";
+
+        }
 
         if (spinSpeed >= 350) {
 
@@ -262,7 +154,13 @@ function lockTarget() {
 
     document.getElementById(
         "rollButton"
-    ).disabled = true;
+    ).style.display =
+        "none";
+
+    document.getElementById(
+        "namebox"
+    ).innerText =
+        "Consulting the doodles...";
 
 }
 
@@ -271,6 +169,20 @@ function finishRoll() {
     clearTimeout(
         spinTimeout
     );
+
+    document.getElementById(
+        "namebox"
+    ).innerText =
+        "Almost decided...";
+
+    setTimeout(
+        revealWinner,
+        800
+    );
+
+}
+
+function revealWinner() {
 
     let winner;
 
@@ -287,12 +199,12 @@ function finishRoll() {
 
     );
 
-    currentCharacter = winner;
     lastLockedCharacter = winner;
 
     document.getElementById(
         "portrait"
-    ).src = winner.image;
+    ).src =
+        winner.image;
 
     document.getElementById(
         "namebox"
@@ -300,9 +212,10 @@ function finishRoll() {
 
     `
     <div style="
-    font-size:28px;
+    font-size:30px;
     color:#2bb6a8;
     margin-bottom:10px;
+    font-weight:bold;
     ">
     THE FATES HAVE SPOKEN!
     </div>
@@ -330,11 +243,12 @@ function finishRoll() {
     text-decoration:none;
     display:inline-block;
     font-size:18px;
+    margin-bottom:12px;
     ">
     View Character
     </a>
 
-    <br><br>
+    <br>
 
     <button
     onclick="reroll()"
@@ -342,11 +256,13 @@ function finishRoll() {
     background:#2bb6a8;
     color:white;
     border:none;
-    padding:10px 20px;
-    border-radius:10px;
+    padding:18px 36px;
+    border-radius:12px;
+    font-size:22px;
+    font-weight:bold;
     cursor:pointer;
     ">
-    🔄 Roll Again
+    🔄 ROLL AGAIN
     </button>
     `;
 
@@ -362,21 +278,24 @@ function reroll() {
         "linkbox"
     ).innerHTML = "";
 
-    spinSpeed = 80;
+    document.getElementById(
+        "namebox"
+    ).innerText =
+        "Digging through character pile...";
+
+    spinSpeed = 100;
 
     isSlowingDown = false;
-
-    document.getElementById(
-        "rollButton"
-    ).disabled = false;
 
     spin();
 
 }
 
+document.getElementById(
+    "namebox"
+).innerText =
+    "Digging through character pile...";
+
 spin();
 
 </script>
-
-</body>
-</html>
