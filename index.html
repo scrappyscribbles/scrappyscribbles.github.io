@@ -14,7 +14,7 @@ text-align:center;
 padding:30px;
 ">
 
-<h1>ʕノ•ᴥ•ʔノ SCRAPPY'S RANDOMIZED OC DECIDER ⚔</h1>
+<h1>ʕノ•ᴥ•ʔノ SCRAPPY'S RANDOMIZED OC DECIDER</h1>
 
 <p>
 Can't decide who to attack?<br>
@@ -302,31 +302,20 @@ function lockTarget() {
 
 function finishRoll() {
 
-    clearTimeout(spinTimeout);
+    clearTimeout(
+        spinTimeout
+    );
 
-    document.getElementById("namebox").innerText =
+    document.getElementById(
+        "namebox"
+    ).innerText =
         "The fates have decided...";
 
-    let extraShuffles = 3;
+    setTimeout(
+        revealWinner,
+        1000
+    );
 
-    function finalShuffleStep() {
-
-        if (extraShuffles > 0) {
-
-            displayCharacter(getRandomCharacter());
-
-            extraShuffles--;
-
-            setTimeout(finalShuffleStep, 120);
-
-        } else {
-
-            revealWinner();
-
-        }
-    }
-
-    setTimeout(finalShuffleStep, 500);
 }
 
 function revealWinner() {
