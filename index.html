@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Scrappy's Character Roulette</title>
+</head>
+
+<body style="
+    background:#101820;
+    color:white;
+    font-family:Arial, sans-serif;
+    text-align:center;
+    padding:40px;
+">
+
+    <h1>🐻 Scrappy's Character Roulette</h1>
+
+    <p>
+        Not sure who to attack?<br>
+        Let fate decide.
+    </p>
+
+    <button
+        onclick="rollCharacter()"
+        style="
+            background:#2bb6a8;
+            color:white;
+            border:none;
+            padding:15px 30px;
+            font-size:18px;
+            border-radius:10px;
+        "
+    >
+        🎲 Roll Character
+    </button>
+
+    <div id="result" style="margin-top:30px;">
+        No character selected yet.
+    </div>
+
+<script>
+
+const chars = [
+
+{
+    name: "Scrap",
+    url: "https://artfight.net/character/1944744.scrap"
+},
+
+{
+    name: "Leon",
+    url: "https://artfight.net/character/1238291.leon"
+},
+
+{
+    name: "Bo the Pizza Delivery Guy",
+    url: "https://artfight.net/character/2026175.bo-the-pizza-delivery-guy"
+},
+
+{
+    name: "Max",
+    url: "https://artfight.net/character/1819259.max"
+},
+
+{
+    name: "Woof",
+    url: "https://artfight.net/character/3252313.woof"
+},
+
+{
+    name: "Renwick the Cutthroat Captain",
+    url: "https://artfight.net/character/3970912.renwick-the-cutthroat-captain"
+},
+
+{
+    name: "Scrap (Animatronic Version)",
+    url: "https://artfight.net/character/4111662.scrap-animatronic-version"
+},
+
+{
+    name: "Thunder Steelstrike",
+    url: "https://artfight.net/character/4111906.thunder-steelstrike"
+},
+
+{
+    name: "Orvyn the Blacksmith",
+    url: "https://artfight.net/character/4508183.orvyn-the-blacksmith"
+},
+
+{
+    name: "Bob",
+    url: "https://artfight.net/character/4855023.bob"
+}
+
+];
+
+function rollCharacter() {
+
+    const chosen =
+        chars[Math.floor(Math.random() * chars.length)];
+
+    document.getElementById("result").innerHTML = `
+        <h2>${chosen.name}</h2>
+
+        <p>
+            Your attack target has been selected!
+        </p>
+
+        <p>
+            <a href="${chosen.url}">
+                View Character
+            </a>
+        </p>
+
+        <p>
+            Click the button again to reroll.
+        </p>
+    `;
+}
+
+</script>
+
+</body>
+</html>
