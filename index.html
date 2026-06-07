@@ -135,11 +135,12 @@ image:"images/bob.png"
 ];
 
 let currentCharacter = null;
-let lastCharacter = null;
+let previousCharacter = null;
 let lastLockedCharacter = null;
 
-let spinning = true;
-let slowingDown = false;
+let spinSpeed = 120;
+let isSlowingDown = false;
+let spinTimeout = null;
 
 function getRandomCharacter() {
 
@@ -156,16 +157,18 @@ function getRandomCharacter() {
             ];
 
     } while (
-        lastCharacter &&
-        chosen.name === lastCharacter.name
+
+        previousCharacter &&
+        chosen.name === previousCharacter.name
+
     );
 
-    lastCharacter = chosen;
+    previousCharacter = chosen;
 
     return chosen;
 }
 
-function showCharacter(character) {
+function displayCharacter(character) {
 
     currentCharacter = character;
 
@@ -176,61 +179,47 @@ function showCharacter(character) {
         "SCANNING DATABASE...";
 }
 
-function spinLoop(speed) {
+function spin() {
 
-    if (!spinning) return;
-
-    showCharacter(
+    displayCharacter(
         getRandomCharacter()
     );
 
-    setTimeout(
-        () => spinLoop(speed),
-        speed
-    );
+    if (isSlowingDown) {
 
-}
+        spinSpeed += 20;
 
-spinLoop(120);
-
-function lockTarget() {
-
-    if (slowingDown) return;
-
-    slowingDown = true;
-
-    document.getElementById("rollButton").disabled = true;
-
-    let speed = 120;
-
-    function slowSpin() {
-
-        showCharacter(
-            getRandomCharacter()
-        );
-
-        speed += 25;
-
-        if (speed < 700) {
-
-            setTimeout(
-                slowSpin,
-                speed
-            );
-
-        } else {
+        if (spinSpeed >= 700) {
 
             finishRoll();
+            return;
 
         }
 
     }
 
-    slowSpin();
+    spinTimeout =
+        setTimeout(
+            spin,
+            spinSpeed
+        );
+}
+
+function lockTarget() {
+
+    if (isSlowingDown) return;
+
+    isSlowingDown = true;
+
+    document.getElementById(
+        "rollButton"
+    ).disabled = true;
 
 }
 
 function finishRoll() {
+
+    clearTimeout(spinTimeout);
 
     let winner;
 
@@ -240,22 +229,30 @@ function finishRoll() {
             getRandomCharacter();
 
     } while (
+
         lastLockedCharacter &&
         winner.name ===
         lastLockedCharacter.name
+
     );
 
     currentCharacter = winner;
     lastLockedCharacter = winner;
 
-    document.getElementById("portrait").src =
-        winner.image;
+    document.getElementById(
+        "portrait"
+    ).src = winner.image;
 
-    document.getElementById("namebox").innerText =
+    document.getElementById(
+        "namebox"
+    ).innerText =
         "TARGET ACQUIRED: " +
         winner.name;
 
-    document.getElementById("linkbox").innerHTML =
+    document.getElementById(
+        "linkbox"
+    ).innerHTML =
+
     `
     <a
     href="${winner.url}"
@@ -285,23 +282,35 @@ function finishRoll() {
     🔄 Roll Again
     </button>
     `;
+
 }
 
 function reroll() {
 
-    document.getElementById("linkbox").innerHTML = "";
+    clearTimeout(spinTimeout);
 
-    document.getElementById("namebox").innerText =
+    document.getElementById(
+        "linkbox"
+    ).innerHTML = "";
+
+    document.getElementById(
+        "namebox"
+    ).innerText =
         "SCANNING DATABASE...";
 
-    slowingDown = false;
+    spinSpeed = 120;
 
-    document.getElementById("rollButton").disabled =
-        false;
+    isSlowingDown = false;
 
-    spinLoop(120);
+    document.getElementById(
+        "rollButton"
+    ).disabled = false;
+
+    spin();
 
 }
+
+spin();
 
 </script>
 
