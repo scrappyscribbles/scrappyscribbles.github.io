@@ -1,121 +1,209 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>Scrappy's Character Roulette</title>
+<meta charset="UTF-8">
+<title>Scrappy's Attack Target Generator</title>
 </head>
 
 <body style="
-    background:#101820;
-    color:white;
-    font-family:Arial, sans-serif;
-    text-align:center;
-    padding:40px;
+background:#101820;
+color:white;
+font-family:Arial,sans-serif;
+text-align:center;
+padding:30px;
 ">
 
-    <h1>🐻 Scrappy's Character Roulette</h1>
+<h1>⚔ SCRAPPY'S ATTACK TARGET GENERATOR ⚔</h1>
 
-    <p>
-        Not sure who to attack?<br>
-        Let fate decide.
-    </p>
+<p>
+Can't decide who to attack?<br>
+Lock in a target and let fate decide.
+</p>
 
-    <button
-        onclick="rollCharacter()"
-        style="
-            background:#2bb6a8;
-            color:white;
-            border:none;
-            padding:15px 30px;
-            font-size:18px;
-            border-radius:10px;
-        "
-    >
-        🎲 Roll Character
-    </button>
+<img
+id="portrait"
+src="images/mystery.png"
+style="
+width:300px;
+height:300px;
+border-radius:15px;
+border:4px solid #2bb6a8;
+"
+>
 
-    <div id="result" style="margin-top:30px;">
-        No character selected yet.
-    </div>
+<div
+id="namebox"
+style="
+margin-top:20px;
+font-size:24px;
+font-weight:bold;
+"
+>
+SCANNING DATABASE...
+</div>
+
+<br>
+
+<button
+id="rollButton"
+onclick="lockTarget()"
+style="
+background:#2bb6a8;
+color:white;
+border:none;
+padding:15px 30px;
+font-size:20px;
+border-radius:10px;
+"
+>
+🎲 LOCK TARGET
+</button>
+
+<div
+id="linkbox"
+style="
+margin-top:20px;
+"
+>
+</div>
 
 <script>
 
-const chars = [
+const characters = [
 
 {
-    name: "Scrap",
-    url: "https://artfight.net/character/1944744.scrap"
+name:"Scrap",
+url:"https://artfight.net/character/1944744.scrap",
+image:"images/scrap.png"
 },
 
 {
-    name: "Leon",
-    url: "https://artfight.net/character/1238291.leon"
+name:"Leon",
+url:"https://artfight.net/character/1238291.leon",
+image:"images/leon.png"
 },
 
 {
-    name: "Bo the Pizza Delivery Guy",
-    url: "https://artfight.net/character/2026175.bo-the-pizza-delivery-guy"
+name:"Bo the Pizza Delivery Guy",
+url:"https://artfight.net/character/2026175.bo-the-pizza-delivery-guy",
+image:"images/bo.png"
 },
 
 {
-    name: "Max",
-    url: "https://artfight.net/character/1819259.max"
+name:"Max",
+url:"https://artfight.net/character/1819259.max",
+image:"images/max.png"
 },
 
 {
-    name: "Woof",
-    url: "https://artfight.net/character/3252313.woof"
+name:"Woof",
+url:"https://artfight.net/character/3252313.woof",
+image:"images/woof.png"
 },
 
 {
-    name: "Renwick the Cutthroat Captain",
-    url: "https://artfight.net/character/3970912.renwick-the-cutthroat-captain"
+name:"Renwick the Cutthroat Captain",
+url:"https://artfight.net/character/3970912.renwick-the-cutthroat-captain",
+image:"images/renwick.png"
 },
 
 {
-    name: "Scrap (Animatronic Version)",
-    url: "https://artfight.net/character/4111662.scrap-animatronic-version"
+name:"Scrap (Animatronic Version)",
+url:"https://artfight.net/character/4111662.scrap-animatronic-version",
+image:"images/animatronic_scrap.png"
 },
 
 {
-    name: "Thunder Steelstrike",
-    url: "https://artfight.net/character/4111906.thunder-steelstrike"
+name:"Thunder Steelstrike",
+url:"https://artfight.net/character/4111906.thunder-steelstrike",
+image:"images/thunder.png"
 },
 
 {
-    name: "Orvyn the Blacksmith",
-    url: "https://artfight.net/character/4508183.orvyn-the-blacksmith"
+name:"Orvyn the Blacksmith",
+url:"https://artfight.net/character/4508183.orvyn-the-blacksmith",
+image:"images/orvyn.png"
 },
 
 {
-    name: "Bob",
-    url: "https://artfight.net/character/4855023.bob"
+name:"Bob",
+url:"https://artfight.net/character/4855023.bob",
+image:"images/bob.png"
 }
 
 ];
 
-function rollCharacter() {
+let currentCharacter = null;
 
-    const chosen =
-        chars[Math.floor(Math.random() * chars.length)];
+function randomCharacter() {
+    return characters[
+        Math.floor(Math.random() * characters.length)
+    ];
+}
 
-    document.getElementById("result").innerHTML = `
-        <h2>${chosen.name}</h2>
+function cycleImages() {
 
-        <p>
-            Your attack target has been selected!
-        </p>
+    const chosen = randomCharacter();
 
-        <p>
-            <a href="${chosen.url}">
-                View Character
-            </a>
-        </p>
+    currentCharacter = chosen;
 
-        <p>
-            Click the button again to reroll.
-        </p>
+    document.getElementById("portrait").src =
+        chosen.image;
+
+    document.getElementById("namebox").innerText =
+        chosen.name;
+}
+
+let cycling = setInterval(cycleImages, 150);
+
+function lockTarget() {
+
+    clearInterval(cycling);
+
+    document.getElementById("namebox").innerText =
+        "TARGET ACQUIRED: " + currentCharacter.name;
+
+    document.getElementById("linkbox").innerHTML =
+    `
+    <a
+    href="${currentCharacter.url}"
+    style="
+    background:#3b82f6;
+    color:white;
+    padding:12px 24px;
+    border-radius:10px;
+    text-decoration:none;
+    display:inline-block;
+    font-size:18px;
+    ">
+    View Character
+    </a>
+
+    <br><br>
+
+    <button
+    onclick="reroll()"
+    style="
+    background:#2bb6a8;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:10px;
+    ">
+    🔄 Roll Again
+    </button>
     `;
+}
+
+function reroll() {
+
+    document.getElementById("linkbox").innerHTML = "";
+
+    cycling = setInterval(cycleImages,150);
+
+    document.getElementById("namebox").innerText =
+        "SCANNING DATABASE...";
 }
 
 </script>
