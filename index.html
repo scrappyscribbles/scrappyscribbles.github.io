@@ -134,11 +134,36 @@ image:"images/bob.png"
 
 ];
 
+const spinMessages = [
+
+"Digging through character pile...",
+"Consulting the doodles...",
+"Looking for inspiration...",
+"Shaking the OC box...",
+"Throwing darts at character wall...",
+"Trying not to choose favorites...",
+"Summoning artistic chaos...",
+"Searching for today's victim..."
+
+];
+
+const slowdownMessages = [
+
+"The doodles are debating...",
+"The fates are thinking...",
+"Almost decided...",
+"Just a moment...",
+"One more shuffle...",
+"This is a tough one..."
+
+];
+];
+
 let currentCharacter = null;
 let previousCharacter = null;
 let lastLockedCharacter = null;
 
-let spinSpeed = 120;
+let spinSpeed = 80;
 let isSlowingDown = false;
 let spinTimeout = null;
 
@@ -149,18 +174,16 @@ function getRandomCharacter() {
     do {
 
         chosen =
-            characters[
-                Math.floor(
-                    Math.random() *
-                    characters.length
-                )
-            ];
+        characters[
+            Math.floor(
+                Math.random() *
+                characters.length
+            )
+        ];
 
     } while (
-
         previousCharacter &&
         chosen.name === previousCharacter.name
-
     );
 
     previousCharacter = chosen;
@@ -168,15 +191,41 @@ function getRandomCharacter() {
     return chosen;
 }
 
+function randomMessage() {
+
+    if (isSlowingDown) {
+
+        return slowdownMessages[
+            Math.floor(
+                Math.random() *
+                slowdownMessages.length
+            )
+        ];
+
+    }
+
+    return spinMessages[
+        Math.floor(
+            Math.random() *
+            spinMessages.length
+        )
+    ];
+
+}
+
 function displayCharacter(character) {
 
     currentCharacter = character;
 
-    document.getElementById("portrait").src =
-        character.image;
+    document.getElementById(
+        "portrait"
+    ).src = character.image;
 
-    document.getElementById("namebox").innerText =
-        "SCANNING DATABASE...";
+    document.getElementById(
+        "namebox"
+    ).innerText =
+        randomMessage();
+
 }
 
 function spin() {
@@ -187,9 +236,9 @@ function spin() {
 
     if (isSlowingDown) {
 
-        spinSpeed += 20;
+        spinSpeed += 35;
 
-        if (spinSpeed >= 700) {
+        if (spinSpeed >= 350) {
 
             finishRoll();
             return;
@@ -203,6 +252,7 @@ function spin() {
             spin,
             spinSpeed
         );
+
 }
 
 function lockTarget() {
@@ -219,7 +269,9 @@ function lockTarget() {
 
 function finishRoll() {
 
-    clearTimeout(spinTimeout);
+    clearTimeout(
+        spinTimeout
+    );
 
     let winner;
 
@@ -245,9 +297,24 @@ function finishRoll() {
 
     document.getElementById(
         "namebox"
-    ).innerText =
-        "TARGET ACQUIRED: " +
-        winner.name;
+    ).innerHTML =
+
+    `
+    <div style="
+    font-size:28px;
+    color:#2bb6a8;
+    margin-bottom:10px;
+    ">
+    THE FATES HAVE SPOKEN!
+    </div>
+
+    <div style="
+    font-size:24px;
+    color:white;
+    ">
+    ${winner.name}
+    </div>
+    `;
 
     document.getElementById(
         "linkbox"
@@ -278,6 +345,7 @@ function finishRoll() {
     border:none;
     padding:10px 20px;
     border-radius:10px;
+    cursor:pointer;
     ">
     🔄 Roll Again
     </button>
@@ -287,18 +355,15 @@ function finishRoll() {
 
 function reroll() {
 
-    clearTimeout(spinTimeout);
+    clearTimeout(
+        spinTimeout
+    );
 
     document.getElementById(
         "linkbox"
     ).innerHTML = "";
 
-    document.getElementById(
-        "namebox"
-    ).innerText =
-        "SCANNING DATABASE...";
-
-    spinSpeed = 120;
+    spinSpeed = 80;
 
     isSlowingDown = false;
 
