@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 
+    
+
 <head>
 <meta charset="UTF-8">
 <title>Scrappy's Randomized Oc Decider</title>
@@ -425,14 +427,57 @@ spin();
 
 }
 
+function preloadImages(callback) {
+
+    let loaded = 0;
+
+    characters.forEach(character => {
+
+        const img = new Image();
+
+        img.onload = () => {
+
+            loaded++;
+
+            if (loaded === characters.length) {
+                callback();
+            }
+
+        };
+
+        img.onerror = () => {
+
+            loaded++;
+
+            if (loaded === characters.length) {
+                callback();
+            }
+
+        };
+
+        img.src = character.image;
+
+    });
+
+}
+
 document.getElementById(
     "namebox"
 ).innerText =
-    "Digging through character pile...";
+    "Loading character database...";
 
-shuffleDeck();
+preloadImages(() => {
 
-spin();
+    document.getElementById(
+        "namebox"
+    ).innerText =
+        "Digging through character pile...";
+
+    shuffleDeck();
+
+    spin();
+
+});
 
 </script>
 
